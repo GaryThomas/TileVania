@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 50832021448107434}
   - component: {fileID: 70006743781302280}
   - component: {fileID: 114909391890964558}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 10
   jumpSpeed: 28
-  climbSpeed: 28
+  climbSpeed: 5
 --- !u!212 &212605132080739580
 SpriteRenderer:
   m_ObjectHideFlags: 1
