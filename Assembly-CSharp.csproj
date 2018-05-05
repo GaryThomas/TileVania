@@ -114,11 +114,11 @@
      <Compile Include="Assets\Scripts\Player.cs" />
      <None Include="Assets\2d-extras-master\Assets\Tilemap\Brushes\Tint Brush Smooth\Shaders\TintedTilemap.shader" />
      <None Include="Assets\Cinemachine\ReleaseNotes.txt" />
- <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>/home/gthomas/misc/projects/unity/Udemy_Learn_to_Code/TileVania/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>/home/gthomas/misc/projects/unity/Udemy_Learn_to_Code/TileVania/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.PackageManagerUI.Editor">
+ <HintPath>/home/gthomas/misc/projects/unity/Udemy_Learn_to_Code/TileVania/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/home/gthomas/Unity-2018.1.0b13/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

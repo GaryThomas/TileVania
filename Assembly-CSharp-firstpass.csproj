@@ -64,11 +64,11 @@
      <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\VirtualInput.cs" />
      <None Include="Assets\Standard Assets\Fonts\OpenSans\License!.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
- <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>/home/gthomas/misc/projects/unity/Udemy_Learn_to_Code/TileVania/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>/home/gthomas/misc/projects/unity/Udemy_Learn_to_Code/TileVania/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.PackageManagerUI.Editor">
+ <HintPath>/home/gthomas/misc/projects/unity/Udemy_Learn_to_Code/TileVania/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/home/gthomas/Unity-2018.1.0b13/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

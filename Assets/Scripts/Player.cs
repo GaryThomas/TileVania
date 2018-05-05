@@ -13,17 +13,21 @@ public class Player : MonoBehaviour
 
 	Rigidbody2D _rb;
 	Animator _anim;
-	Collider2D _collider;
+	CapsuleCollider2D _bodyCollider;
+	BoxCollider2D _feetCollider;
 	LayerMask _groundMask;
 	LayerMask _ladderMask;
+	float _origGravity;
 
 	void Awake ()
 	{
 		_rb = GetComponent<Rigidbody2D> ();
 		_anim = GetComponent<Animator> ();
-		_collider = GetComponent<Collider2D> ();
+		_bodyCollider = GetComponent<CapsuleCollider2D> ();
+		_feetCollider = GetComponent<BoxCollider2D> ();
 		_groundMask = LayerMask.GetMask ("Ground");
 		_ladderMask = LayerMask.GetMask ("Climbing");
+		_origGravity = _rb.gravityScale;
 	}
 
 	void Update ()
@@ -54,20 +58,22 @@ public class Player : MonoBehaviour
 
 	void ClimbLadder ()
 	{
-		if (_collider.IsTouchingLayers (_ladderMask)) {
+		if (_feetCollider.IsTouchingLayers (_ladderMask)) {
 			float vert = CrossPlatformInputManager.GetAxis ("Vertical");
-			Vector2 velocity = _rb.velocity + new Vector2 (0f, vert * climbSpeed);
+			Vector2 velocity = new Vector2 (_rb.velocity.x, vert * climbSpeed);
 			print (velocity);
 			_rb.velocity = velocity;
-			_anim.SetBool ("Climbing", true);
+			_rb.gravityScale = 0f;
+			_anim.SetBool ("Climbing", Mathf.Abs (_rb.velocity.y) > Mathf.Epsilon);
 		} else {
+			_rb.gravityScale = _origGravity;
 			_anim.SetBool ("Climbing", false);
 		}
 	}
 
 	void Jump ()
 	{
-		bool canJump = _collider.IsTouchingLayers (_groundMask);
+		bool canJump = _feetCollider.IsTouchingLayers (_groundMask);
 		float jump = canJump && CrossPlatformInputManager.GetButtonDown ("Jump") ? jumpSpeed : 0f;
 		if (jump > 0f) {
 			Vector2 velocity = _rb.velocity + new Vector2 (0f, jump);
