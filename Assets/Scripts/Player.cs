@@ -10,8 +10,10 @@ public class Player : MonoBehaviour
 	[SerializeField] float runSpeed = 10f;
 	[SerializeField] float jumpSpeed = 28f;
 	[SerializeField] float climbSpeed = 28f;
-	[SerializeField] int health = 1;
+	[SerializeField] int health = 3;
 	[SerializeField] Vector2 deathKnell = new Vector2 (15f, 20f);
+	[SerializeField] int enemyDamage = 2;
+	[SerializeField] int hazardsDamage = 1;
 
 	Rigidbody2D _rb;
 	Animator _anim;
@@ -20,6 +22,7 @@ public class Player : MonoBehaviour
 	LayerMask _groundMask;
 	LayerMask _ladderMask;
 	LayerMask _enemyMask;
+	LayerMask _hazardsMask;
 	float _origGravity;
 	bool _isAlive;
 
@@ -32,6 +35,7 @@ public class Player : MonoBehaviour
 		_groundMask = LayerMask.GetMask ("Ground");
 		_ladderMask = LayerMask.GetMask ("Climbing");
 		_enemyMask = LayerMask.GetMask ("Enemy");
+		_hazardsMask = LayerMask.GetMask ("Hazards");
 		_origGravity = _rb.gravityScale;
 		_isAlive = true;
 	}
@@ -89,9 +93,10 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void Damage ()
+	void Damage (int damage = 1)
 	{
-		if (--health <= 0) {
+		health -= damage;
+		if (health <= 0) {
 			_isAlive = false;
 			_anim.SetBool ("IsDead", true);
 			_rb.velocity = deathKnell;
@@ -101,7 +106,10 @@ public class Player : MonoBehaviour
 	void OnCollisionEnter2D (Collision2D other)
 	{
 		if (_bodyCollider.IsTouchingLayers (_enemyMask)) {
-			Damage ();
+			Damage (enemyDamage);
+		} else if (_bodyCollider.IsTouchingLayers (_hazardsMask)) {
+			Damage (hazardsDamage);
 		}
+
 	}
 }
