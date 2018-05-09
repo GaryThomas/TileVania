@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
 	[SerializeField] float runSpeed = 10f;
 	[SerializeField] float jumpSpeed = 28f;
 	[SerializeField] float climbSpeed = 28f;
+	[SerializeField] int health = 1;
+	[SerializeField] Vector2 deathKnell = new Vector2 (15f, 20f);
 
 	Rigidbody2D _rb;
 	Animator _anim;
@@ -17,7 +19,9 @@ public class Player : MonoBehaviour
 	BoxCollider2D _feetCollider;
 	LayerMask _groundMask;
 	LayerMask _ladderMask;
+	LayerMask _enemyMask;
 	float _origGravity;
+	bool _isAlive;
 
 	void Awake ()
 	{
@@ -27,14 +31,18 @@ public class Player : MonoBehaviour
 		_feetCollider = GetComponent<BoxCollider2D> ();
 		_groundMask = LayerMask.GetMask ("Ground");
 		_ladderMask = LayerMask.GetMask ("Climbing");
+		_enemyMask = LayerMask.GetMask ("Enemy");
 		_origGravity = _rb.gravityScale;
+		_isAlive = true;
 	}
 
 	void Update ()
 	{
-		Run ();
-		ClimbLadder ();
-		Jump ();
+		if (_isAlive) {
+			Run ();
+			ClimbLadder ();
+			Jump ();
+		}
 	}
 
 	void Run ()
@@ -78,6 +86,22 @@ public class Player : MonoBehaviour
 		if (jump > 0f) {
 			Vector2 velocity = _rb.velocity + new Vector2 (0f, jump);
 			_rb.velocity = velocity;
+		}
+	}
+
+	void Damage ()
+	{
+		if (--health <= 0) {
+			_isAlive = false;
+			_anim.SetBool ("IsDead", true);
+			_rb.velocity = deathKnell;
+		}
+	}
+
+	void OnCollisionEnter2D (Collision2D other)
+	{
+		if (_bodyCollider.IsTouchingLayers (_enemyMask)) {
+			Damage ();
 		}
 	}
 }
