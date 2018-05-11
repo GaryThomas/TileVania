@@ -24,7 +24,7 @@ public class EnemyMovement : MonoBehaviour
 
 	void OnTriggerExit2D (Collider2D other)
 	{
-		print ("Trigger leaving " + other.name);
+		// print ("Trigger leaving " + other.name);
 		if (!_feetCollider.IsTouchingLayers (_groundLayerMask)) {
 			transform.localScale = new Vector2 (-transform.localScale.x, transform.localScale.y);
 		}
