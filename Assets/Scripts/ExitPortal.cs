@@ -16,6 +16,6 @@ public class ExitPortal : MonoBehaviour
 	{
 		yield return new WaitForSeconds (loadDelay);
 		int currentSceneIndex = SceneManager.GetActiveScene ().buildIndex;
-		SceneManager.LoadScene (currentSceneIndex + 1);  // FIXME
+		SceneManager.LoadScene (currentSceneIndex + 1); 
 	}
 }
