@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 	[SerializeField] Vector2 deathKnell = new Vector2 (15f, 20f);
 	[SerializeField] int enemyDamage = 2;
 	[SerializeField] int hazardsDamage = 1;
+	[SerializeField] bool demoMode = false;
+	[SerializeField] float resurrectionTime = 3f;
 
 	Rigidbody2D _rb;
 	Animator _anim;
@@ -23,8 +25,10 @@ public class Player : MonoBehaviour
 	LayerMask _ladderMask;
 	LayerMask _enemyMask;
 	LayerMask _hazardsMask;
+	Vector2 _origPosition;
 	float _origGravity;
 	bool _isAlive;
+	int _health;
 
 	void Awake ()
 	{
@@ -37,16 +41,27 @@ public class Player : MonoBehaviour
 		_enemyMask = LayerMask.GetMask ("Enemy");
 		_hazardsMask = LayerMask.GetMask ("Hazards");
 		_origGravity = _rb.gravityScale;
+		_origPosition = transform.position;
 		_isAlive = true;
 	}
 
 	void Update ()
 	{
-		if (_isAlive) {
-			Run ();
-			ClimbLadder ();
-			Jump ();
+		if (demoMode) {
+			DemoMode ();
+		} else {
+			if (_isAlive) {
+				Run ();
+				ClimbLadder ();
+				Jump ();
+			}
 		}
+	}
+
+	void DemoMode ()
+	{
+		Vector2 velocity = new Vector2 (0.5f * runSpeed, _rb.velocity.y);
+		_rb.velocity = velocity;
 	}
 
 	void Run ()
@@ -73,7 +88,6 @@ public class Player : MonoBehaviour
 		if (_feetCollider.IsTouchingLayers (_ladderMask)) {
 			float vert = CrossPlatformInputManager.GetAxis ("Vertical");
 			Vector2 velocity = new Vector2 (_rb.velocity.x, vert * climbSpeed);
-			print (velocity);
 			_rb.velocity = velocity;
 			_rb.gravityScale = 0f;
 			_anim.SetBool ("Climbing", Mathf.Abs (_rb.velocity.y) > Mathf.Epsilon);
@@ -95,11 +109,12 @@ public class Player : MonoBehaviour
 
 	void Damage (int damage = 1)
 	{
-		health -= damage;
-		if (health <= 0) {
+		_health -= damage;
+		if (_health <= 0) {
 			_isAlive = false;
 			_anim.SetBool ("IsDead", true);
 			_rb.velocity = deathKnell;
+			StartCoroutine (ResurrectPlayer ());
 		}
 	}
 
@@ -111,5 +126,21 @@ public class Player : MonoBehaviour
 			Damage (hazardsDamage);
 		}
 
+	}
+
+	void ResetPlayer ()
+	{
+		_isAlive = true;
+		transform.position = _origPosition;
+		_rb.gravityScale = _origGravity;
+		_rb.velocity = Vector2.zero;
+		_health = health;
+		_anim.SetBool ("IsDead", false);
+	}
+
+	IEnumerator ResurrectPlayer ()
+	{
+		yield return new WaitForSeconds (resurrectionTime);
+		ResetPlayer ();
 	}
 }
