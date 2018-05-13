@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 	[SerializeField] int hazardsDamage = 1;
 	[SerializeField] bool demoMode = false;
 	[SerializeField] float resurrectionTime = 3f;
+	[SerializeField] float deathTime = 1.5f;
 
 	Rigidbody2D _rb;
 	Animator _anim;
@@ -114,7 +115,11 @@ public class Player : MonoBehaviour
 			_isAlive = false;
 			_anim.SetBool ("IsDead", true);
 			_rb.velocity = deathKnell;
-			StartCoroutine (ResurrectPlayer ());
+			if (demoMode) {
+				StartCoroutine (ResurrectPlayer ());
+			} else {
+				StartCoroutine (KillPlayer ());
+			}
 		}
 	}
 
@@ -142,5 +147,11 @@ public class Player : MonoBehaviour
 	{
 		yield return new WaitForSeconds (resurrectionTime);
 		ResetPlayer ();
+	}
+
+	IEnumerator KillPlayer ()
+	{
+		yield return new WaitForSeconds (deathTime);
+		GameSession.Instance.PlayerDeath ();
 	}
 }
