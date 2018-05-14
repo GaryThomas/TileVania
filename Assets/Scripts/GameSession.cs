@@ -11,6 +11,8 @@ public class GameSession : MonoBehaviour
 	[SerializeField] int score = 0;
 	[SerializeField] TMP_Text scoreText;
 
+	public static bool DemoScreen { get { return SceneManager.GetActiveScene ().buildIndex == 0; } }
+
 	// Singleton
 	static GameSession _instance;
 
@@ -18,21 +20,25 @@ public class GameSession : MonoBehaviour
 		get { 
 			if (_instance == null) {
 				_instance = FindObjectOfType<GameSession> ();
+				DontDestroyOnLoad (_instance.gameObject);
 			}
 			return _instance; 
 		} 
 	}
 
-	public static bool DemoScreen { get { return SceneManager.GetActiveScene ().buildIndex == 0; } }
-
 	void Awake ()
 	{
 		if (_instance == null) {
 			_instance = this;
-			DontDestroyOnLoad (gameObject);
 		} else if (_instance != this) {
 			Destroy (gameObject);
+			return;
 		}
+		DontDestroyOnLoad (gameObject);
+	}
+
+	void Start ()
+	{
 		ShowStatus ();
 	}
 
