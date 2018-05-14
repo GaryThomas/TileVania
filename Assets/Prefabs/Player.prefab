@@ -137,6 +137,13 @@ MonoBehaviour:
   runSpeed: 10
   jumpSpeed: 28
   climbSpeed: 5
+  health: 3
+  deathKnell: {x: 15, y: 20}
+  enemyDamage: 2
+  hazardsDamage: 1
+  resurrectionTime: 3
+  deathTime: 1.5
+  deathSFX: {fileID: 8300000, guid: 353bfe50bd2144778b96a5e91f5703b6, type: 3}
 --- !u!212 &212605132080739580
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -170,7 +177,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 732336535
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300014, guid: 52f3a95385edb4e69b2f6804f3860094, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

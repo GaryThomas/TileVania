@@ -14,9 +14,9 @@ public class Player : MonoBehaviour
 	[SerializeField] Vector2 deathKnell = new Vector2 (15f, 20f);
 	[SerializeField] int enemyDamage = 2;
 	[SerializeField] int hazardsDamage = 1;
-	[SerializeField] bool demoMode = false;
 	[SerializeField] float resurrectionTime = 3f;
 	[SerializeField] float deathTime = 1.5f;
+	[SerializeField] AudioClip deathSFX;
 
 	Rigidbody2D _rb;
 	Animator _anim;
@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
 	float _origGravity;
 	bool _isAlive;
 	int _health;
+	bool _demoMode;
+	GameSession _gs;
 
 	void Awake ()
 	{
@@ -44,11 +46,14 @@ public class Player : MonoBehaviour
 		_origGravity = _rb.gravityScale;
 		_origPosition = transform.position;
 		_isAlive = true;
+		_demoMode = GameSession.DemoScreen;
+		_gs = GameSession.Instance;
+		_gs.ShowStatus ();
 	}
 
 	void Update ()
 	{
-		if (demoMode) {
+		if (_demoMode) {
 			DemoMode ();
 		} else {
 			if (_isAlive) {
@@ -111,14 +116,14 @@ public class Player : MonoBehaviour
 	void Damage (int damage = 1)
 	{
 		_health -= damage;
-		if (_health <= 0) {
+		if (_isAlive && _health <= 0) {
 			_isAlive = false;
 			_anim.SetBool ("IsDead", true);
 			_rb.velocity = deathKnell;
-			if (demoMode) {
+			AudioSource.PlayClipAtPoint (deathSFX, Camera.main.transform.position);
+			StartCoroutine (KillPlayer ());
+			if (_demoMode) {
 				StartCoroutine (ResurrectPlayer ());
-			} else {
-				StartCoroutine (KillPlayer ());
 			}
 		}
 	}
@@ -152,6 +157,6 @@ public class Player : MonoBehaviour
 	IEnumerator KillPlayer ()
 	{
 		yield return new WaitForSeconds (deathTime);
-		GameSession.Instance.PlayerDeath ();
+		_gs.PlayerDeath ();
 	}
 }

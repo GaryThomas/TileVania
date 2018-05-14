@@ -14,7 +14,14 @@ public class GameSession : MonoBehaviour
 	// Singleton
 	static GameSession _instance;
 
-	public static GameSession Instance { get { return _instance; } }
+	public static GameSession Instance {
+		get { 
+			if (_instance == null) {
+				_instance = FindObjectOfType<GameSession> ();
+			}
+			return _instance; 
+		} 
+	}
 
 	public static bool DemoScreen { get { return SceneManager.GetActiveScene ().buildIndex == 0; } }
 
