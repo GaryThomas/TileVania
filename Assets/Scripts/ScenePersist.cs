@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ScenePersist : MonoBehaviour
 {
-	int _startingIndex = -1;
+	static int _startingIndex = -1;
 
 	// Singleton
 	static ScenePersist _instance;
@@ -26,24 +26,35 @@ public class ScenePersist : MonoBehaviour
 		if (_instance == null) {
 			_instance = this;
 		} else if (_instance != this) {
-			Destroy (gameObject);
-			return;
+			// Most likely cause is a new level has been loaded
+			int currentIndex = SceneManager.GetActiveScene ().buildIndex;
+
+			print ("ScenePersist Awake - index: " + _startingIndex.ToString () + "/" + currentIndex.ToString ());
+			if (currentIndex == _startingIndex) {
+				// Keep original instance as the one singleton
+				Destroy (gameObject);
+				return;
+			} else {
+				// Destroy the previous instance and let this one take over
+				Destroy (_instance.gameObject);
+				_instance = this;
+			}
 		}
 		_startingIndex = SceneManager.GetActiveScene ().buildIndex;
 		DontDestroyOnLoad (gameObject);
 	}
 
-	void Start ()
-	{
-		print ("ScenePersist Start");
-		_startingIndex = SceneManager.GetActiveScene ().buildIndex;
-	}
-
-	void OnEnable ()
-	{
-		print ("ScenePersist OnEnable");
-		SceneManager.sceneLoaded += OnLevelFinishedLoading;
-	}
+	//	void Start ()
+	//	{
+	//		print ("ScenePersist Start");
+	//		_startingIndex = SceneManager.GetActiveScene ().buildIndex;
+	//	}
+	//
+	//	void OnEnable ()
+	//	{
+	//		print ("ScenePersist OnEnable");
+	//		SceneManager.sceneLoaded += OnLevelFinishedLoading;
+	//	}
 
 	//	void OnDisable ()
 	//	{
@@ -51,14 +62,14 @@ public class ScenePersist : MonoBehaviour
 	//		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
 	//	}
 
-	void OnLevelFinishedLoading (Scene scene, LoadSceneMode mode)
-	{
-		int currentIndex = SceneManager.GetActiveScene ().buildIndex;
-
-		print ("ScenePersist OnLevelFinishedLoading - index: " + _startingIndex.ToString () + "/" + currentIndex.ToString ());
-		if (_startingIndex != currentIndex) {
-			SceneManager.sceneLoaded -= OnLevelFinishedLoading;
-			Destroy (gameObject);
-		}
-	}
+	//	void OnLevelFinishedLoading (Scene scene, LoadSceneMode mode)
+	//	{
+	//		int currentIndex = SceneManager.GetActiveScene ().buildIndex;
+	//
+	//		print ("ScenePersist OnLevelFinishedLoading - index: " + _startingIndex.ToString () + "/" + currentIndex.ToString ());
+	//		if (_startingIndex != currentIndex) {
+	//			SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+	//			Destroy (gameObject);
+	//		}
+	//	}
 }
