@@ -122,9 +122,9 @@ public class Player : MonoBehaviour
 			_rb.velocity = deathKnell;
 			AudioSource.PlayClipAtPoint (deathSFX, Camera.main.transform.position);
 			StartCoroutine (KillPlayer ());
-//			if (_demoMode) {
-//				StartCoroutine (ResurrectPlayer ());
-//			}
+			if (_demoMode) {
+				StartCoroutine (ResurrectPlayer ());
+			}
 		}
 	}
 
