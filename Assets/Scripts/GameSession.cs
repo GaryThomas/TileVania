@@ -10,6 +10,8 @@ public class GameSession : MonoBehaviour
 	[SerializeField] TMP_Text livesText;
 	[SerializeField] int score = 0;
 	[SerializeField] TMP_Text scoreText;
+	[SerializeField] float deathDisplayTime = 3f;
+	[SerializeField] TMP_Text deathText;
 
 	public static bool DemoScreen { get { return SceneManager.GetActiveScene ().buildIndex == 0; } }
 
@@ -64,19 +66,30 @@ public class GameSession : MonoBehaviour
 
 	public void PlayerDeath ()
 	{
-		lives -= 1;
-		ShowLives ();
-		if (lives <= 0) {
-			SceneManager.LoadScene (0);
-			Destroy (gameObject);
-		} else {
-			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+		if (!DemoScreen) {
+			lives -= 1;
+			ShowLives ();
+			if (lives <= 0) {
+				StartCoroutine (RestartGame ());
+			} else {
+				SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+			}
 		}
+	}
+
+	IEnumerator RestartGame ()
+	{
+		deathText.enabled = true;
+		yield return new WaitForSeconds (deathDisplayTime);
+		SceneManager.LoadScene (0);
+		Destroy (gameObject);
 	}
 
 	public void AdjustScore (int amount)
 	{
-		score += amount;
-		ShowScore ();
+		if (!DemoScreen) {
+			score += amount;
+			ShowScore ();
+		}
 	}
 }
