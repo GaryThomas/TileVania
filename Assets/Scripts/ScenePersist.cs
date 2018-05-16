@@ -44,32 +44,4 @@ public class ScenePersist : MonoBehaviour
 		DontDestroyOnLoad (gameObject);
 	}
 
-	//	void Start ()
-	//	{
-	//		print ("ScenePersist Start");
-	//		_startingIndex = SceneManager.GetActiveScene ().buildIndex;
-	//	}
-	//
-	//	void OnEnable ()
-	//	{
-	//		print ("ScenePersist OnEnable");
-	//		SceneManager.sceneLoaded += OnLevelFinishedLoading;
-	//	}
-
-	//	void OnDisable ()
-	//	{
-	//		print ("ScenePersist OnDisable");
-	//		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
-	//	}
-
-	//	void OnLevelFinishedLoading (Scene scene, LoadSceneMode mode)
-	//	{
-	//		int currentIndex = SceneManager.GetActiveScene ().buildIndex;
-	//
-	//		print ("ScenePersist OnLevelFinishedLoading - index: " + _startingIndex.ToString () + "/" + currentIndex.ToString ());
-	//		if (_startingIndex != currentIndex) {
-	//			SceneManager.sceneLoaded -= OnLevelFinishedLoading;
-	//			Destroy (gameObject);
-	//		}
-	//	}
 }
